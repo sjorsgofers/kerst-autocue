@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Kerstverhaal Autocue</title>
+<meta name="description" content="Autocue / teleprompter voor het kerstverhaal - handmatig scrollen of automatisch met instelbare snelheid.">
+
+<!-- Volledig scherm wanneer toegevoegd aan het iPad-beginscherm -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Autocue">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Voortgangsbalk bovenaan -->
+<div id="progress" aria-hidden="true"><div id="progressBar"></div></div>
+
+<!-- De autocue zelf -->
+<main id="viewport" tabindex="0" aria-label="Autocue tekst">
+  <div id="mirror">
+    <article id="content"></article>
+  </div>
+</main>
+
+<!-- Leeslijn -->
+<div id="guide" aria-hidden="true">
+  <span class="arrow left"></span>
+  <span class="arrow right"></span>
+</div>
+
+<!-- Bedieningspaneel -->
+<div id="panel">
+  <!-- Hint bij het openen -->
+  <div id="hint">Tik op de tekst om deze knoppen te verbergen</div>
+
+  <div class="row main">
+    <button id="btnPlay" class="btn big" aria-label="Start of pauzeer">
+      <span class="ico play"></span><span class="label">Start</span>
+    </button>
+
+    <div class="group">
+      <span class="cap">Tempo (woorden&nbsp;/&nbsp;min)</span>
+      <div class="stepper">
+        <button class="btn sq" id="speedDown" aria-label="Langzamer">&minus;</button>
+        <input type="range" id="speed" min="40" max="240" step="5" value="120" aria-label="Tempo in woorden per minuut">
+        <button class="btn sq" id="speedUp" aria-label="Sneller">+</button>
+        <output id="speedVal">120</output>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="cap">Tekstgrootte</span>
+      <div class="stepper">
+        <button class="btn sq" id="fontDown" aria-label="Kleiner">A&minus;</button>
+        <input type="range" id="font" min="24" max="140" step="2" value="56" aria-label="Tekstgrootte">
+        <button class="btn sq" id="fontUp" aria-label="Groter">A+</button>
+        <output id="fontVal">56</output>
+      </div>
+    </div>
+
+    <button id="btnSettings" class="btn sq wide" aria-label="Meer instellingen" title="Meer instellingen">&#9881;</button>
+    <button id="btnFull" class="btn sq wide" aria-label="Volledig scherm" title="Volledig scherm">&#9974;</button>
+  </div>
+
+  <div class="row extra" id="extraRow" hidden>
+    <div class="group">
+      <span class="cap">Scene</span>
+      <select id="jump" aria-label="Spring naar scene"></select>
+    </div>
+
+    <div class="group">
+      <span class="cap">Regelbreedte</span>
+      <input type="range" id="width" min="40" max="100" step="5" value="85" aria-label="Regelbreedte">
+    </div>
+
+    <div class="group">
+      <span class="cap">Leeslijn</span>
+      <input type="range" id="linePos" min="10" max="70" step="5" value="38" aria-label="Positie leeslijn">
+    </div>
+
+    <div class="group">
+      <span class="cap">Thema</span>
+      <div class="chips" id="themeChips">
+        <button class="chip" data-theme="dark">Wit op zwart</button>
+        <button class="chip" data-theme="light">Zwart op wit</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="cap">Weergave</span>
+      <div class="chips">
+        <button class="chip" id="btnMirror">Spiegelen</button>
+        <button class="chip" id="btnGuide">Leeslijn</button>
+        <button class="chip" id="btnReset">Naar begin</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="cap">Resterend</span>
+      <span class="readout" id="remaining">--:--</span>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -24,17 +24,20 @@ volledig scherm binnen de browser zelf.
 | --- | --- |
 | Knoppen tonen of verbergen | Tik ergens op de tekst |
 | Automatisch scrollen | Knop **Start / Pauze** |
-| Snelheid | Schuifregelaar of de knoppen &minus; en + |
+| Snelheid | Schuifregelaar of de knoppen &minus; en +; het tempo staat in **woorden per minuut**, dus de resttijd klopt ook als je de tekst groter of kleiner maakt |
 | Tekstgrootte | Schuifregelaar of **A&minus;** / **A+** |
 | Handmatig scrollen | Gewoon vegen; het automatisch scrollen pauzeert vanzelf en gaat daarna verder |
 | Naar een scene springen | Tandwiel &#9881; &rarr; **Scene** |
-| Regelbreedte, leeslijn, thema, spiegelen | Tandwiel &#9881; |
+| Regelbreedte, leeslijn, spiegelen (voor een teleprompter-spiegel) | Tandwiel &#9881; |
+| Wit op zwart of zwart op wit | Tandwiel &#9881; &rarr; **Thema** |
 | Naar het begin | Tandwiel &#9881; &rarr; **Naar begin** |
 
 De app onthoudt je instellingen en waar je gebleven was.
 
 Met een bluetooth-toetsenbord: `spatie` start/pauzeert, `pijltje omhoog/omlaag` past de snelheid aan,
 `+` en `-` de tekstgrootte, `f` volledig scherm, `m` spiegelen, `Home` terug naar het begin.
+
+De app onthoudt ook waar je gebleven was, dus je kunt hem tussendoor gerust sluiten.
 
 ## Tekst aanpassen
 

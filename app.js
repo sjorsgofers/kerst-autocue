@@ -386,15 +386,22 @@
   applyAll();
   layout();
 
-  // Terug naar de laatst gelezen alinea
-  requestAnimationFrame(() => {
+  // Terug naar de laatst gelezen alinea.
+  // Na de eerste opmaak, en met een tweede poging voor het geval de pagina
+  // op de achtergrond wordt geladen (dan komt requestAnimationFrame niet aan bod).
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
     if (settings.block) {
       const el = nodes[Math.min(settings.block, nodes.length - 1)];
       scrollToNode(el);
     }
     uiTimer = -1e6;
     update();
-  });
+  }
+  requestAnimationFrame(start);
+  setTimeout(start, 250);
 
   setTimeout(() => $('hint').classList.add('gone'), 4000);
 })();

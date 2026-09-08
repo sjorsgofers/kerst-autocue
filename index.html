@@ -36,10 +36,13 @@
   <span class="arrow right"></span>
 </div>
 
+<!-- Grote tempomelding tijdens het vegen -->
+<div id="tempoToast" aria-hidden="true"><strong id="tempoToastVal">120</strong><span>woorden / min</span></div>
+
 <!-- Bedieningspaneel -->
 <div id="panel">
   <!-- Hint bij het openen -->
-  <div id="hint">Tik op de tekst om deze knoppen te verbergen</div>
+  <div id="hint">Veeg omhoog of omlaag voor het tempo &middot; tik om deze knoppen te verbergen</div>
 
   <div class="row main">
     <button id="btnPlay" class="btn big" aria-label="Start of pauzeer">
@@ -97,6 +100,7 @@
     <div class="group">
       <span class="cap">Weergave</span>
       <div class="chips">
+        <button class="chip" id="btnSwipe">Vegen = tempo</button>
         <button class="chip" id="btnMirror">Spiegelen</button>
         <button class="chip" id="btnGuide">Leeslijn</button>
         <button class="chip" id="btnReset">Naar begin</button>

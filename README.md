@@ -26,7 +26,8 @@ volledig scherm binnen de browser zelf.
 | Automatisch scrollen | Knop **Start / Pauze** |
 | Snelheid | Schuifregelaar of de knoppen &minus; en +; het tempo staat in **woorden per minuut**, dus de resttijd klopt ook als je de tekst groter of kleiner maakt |
 | Tekstgrootte | Schuifregelaar of **A&minus;** / **A+** |
-| Handmatig scrollen | Gewoon vegen; het automatisch scrollen pauzeert vanzelf en gaat daarna verder |
+| Tempo bijsturen tijdens het voorlezen | Veeg omhoog (sneller) of omlaag (langzamer) over de tekst; de tekst zelf verspringt niet, je ziet het nieuwe tempo groot in beeld |
+| Handmatig door de tekst scrollen | Zet in het tandwiel &#9881; de knop **Vegen = tempo** uit; dan schuif je met vegen weer door het verhaal en pauzeert het automatisch scrollen zolang je veegt |
 | Naar een scene springen | Tandwiel &#9881; &rarr; **Scene** |
 | Regelbreedte, leeslijn, spiegelen (voor een teleprompter-spiegel) | Tandwiel &#9881; |
 | Wit op zwart of zwart op wit | Tandwiel &#9881; &rarr; **Thema** |

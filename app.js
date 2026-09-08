@@ -16,7 +16,7 @@
 
   /* ---------- Instellingen ---------- */
   // speed = tempo in woorden per minuut
-  const DEFAULTS = { speed: 120, font: 56, width: 85, linePos: 38, theme: 'dark', mirror: 0, guide: 1, swipe: 1, block: 0 };
+  const DEFAULTS = { speed: 120, font: 56, width: 85, linePos: 38, theme: 'dark', mirror: 0, guide: 1, block: 0 };
   const MIN_WPM = 40, MAX_WPM = 240;
   const settings = load();
   settings.speed = Math.min(MAX_WPM, Math.max(MIN_WPM, settings.speed || DEFAULTS.speed));
@@ -204,27 +204,13 @@
     update();
   }, { passive: true });
 
-  vp.addEventListener('touchstart', () => { if (!settings.swipe) pauseForUser(); }, { passive: true });
-  vp.addEventListener('touchend', () => { if (!settings.swipe) resumeAfterUser(); }, { passive: true });
-  vp.addEventListener('touchcancel', () => { if (!settings.swipe) resumeAfterUser(); }, { passive: true });
+  vp.addEventListener('touchstart', pauseForUser, { passive: true });
+  vp.addEventListener('touchend', resumeAfterUser, { passive: true });
+  vp.addEventListener('touchcancel', resumeAfterUser, { passive: true });
+  vp.addEventListener('wheel', () => { pauseForUser(); resumeAfterUser(); }, { passive: true });
 
-  /* ---------- Vegen bedient het tempo ---------- */
-  // Omhoog vegen = sneller, omlaag vegen = langzamer. De tekst zelf blijft
-  // gewoon doorlopen; je verspringt dus nooit per ongeluk in het verhaal.
-  const PX_PER_WPM = 8;      // zoveel pixels vegen is een woord per minuut
-  let tempoFloat = 0;        // vloeiende tussenwaarde tijdens het vegen
-  let lastAdjust = 0;
+  // Grote tempomelding, zodat je het nieuwe tempo ook ziet als de knoppen weg zijn
   let toastTimer = null;
-
-  function adjustTempo(px) {
-    const now = Date.now();
-    if (now - lastAdjust > 600) tempoFloat = settings.speed;   // nieuw gebaar: opnieuw beginnen
-    lastAdjust = now;
-    tempoFloat = Math.min(MAX_WPM, Math.max(MIN_WPM, tempoFloat + px / PX_PER_WPM));
-    setSpeed(tempoFloat);
-    showTempo();
-  }
-
   function showTempo() {
     const t = $('tempoToast');
     $('tempoToastVal').textContent = settings.speed;
@@ -233,44 +219,13 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 900);
   }
 
-  vp.addEventListener('wheel', (e) => {
-    if (settings.swipe) {
-      e.preventDefault();
-      adjustTempo(-e.deltaY / 2.5);
-    } else {
-      pauseForUser();
-      resumeAfterUser();
-    }
-  }, { passive: false });
-
   /* ---------- Tikken = knoppen tonen of verbergen ---------- */
   let tapX = 0, tapY = 0, tapT = 0;
-  let dragging = false, dragY = 0, dragged = 0;
-
-  vp.addEventListener('pointerdown', (e) => {
-    tapX = e.clientX; tapY = e.clientY; tapT = Date.now();
-    if (!settings.swipe) return;
-    dragging = true; dragY = e.clientY; dragged = 0;
-    tempoFloat = settings.speed; lastAdjust = Date.now();
-    try { vp.setPointerCapture(e.pointerId); } catch (err) {}
-  });
-
-  vp.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    const dy = e.clientY - dragY;
-    dragY = e.clientY;
-    dragged += Math.abs(dy);
-    if (dragged < 12) return;      // een tik met een klein trillinkje is geen veeg
-    adjustTempo(-dy);
-  });
-
-  function endDrag() { dragging = false; }
+  vp.addEventListener('pointerdown', (e) => { tapX = e.clientX; tapY = e.clientY; tapT = Date.now(); });
   vp.addEventListener('pointerup', (e) => {
-    endDrag();
     const moved = Math.hypot(e.clientX - tapX, e.clientY - tapY);
     if (moved < 12 && Date.now() - tapT < 400) togglePanel();
   });
-  vp.addEventListener('pointercancel', endDrag);
 
   let hideTimer = null;
   function showPanel() {
@@ -343,10 +298,8 @@
     html.dataset.theme = settings.theme;
     html.dataset.mirror = settings.mirror ? '1' : '0';
     html.dataset.guide = settings.guide ? '1' : '0';
-    html.dataset.swipe = settings.swipe ? '1' : '0';
     $('btnMirror').classList.toggle('on', !!settings.mirror);
     $('btnGuide').classList.toggle('on', !!settings.guide);
-    $('btnSwipe').classList.toggle('on', !!settings.swipe);
     document.querySelectorAll('#themeChips .chip').forEach((c) => {
       c.classList.toggle('on', c.dataset.theme === settings.theme);
     });
@@ -393,7 +346,6 @@
   $('btnFull').addEventListener('click', toggleFullscreen);
   $('btnMirror').addEventListener('click', () => { settings.mirror = settings.mirror ? 0 : 1; applyAll(); persist(); });
   $('btnGuide').addEventListener('click', () => { settings.guide = settings.guide ? 0 : 1; applyAll(); persist(); });
-  $('btnSwipe').addEventListener('click', () => { settings.swipe = settings.swipe ? 0 : 1; applyAll(); persist(); });
   $('btnReset').addEventListener('click', () => { setPlaying(false); setPos(0); uiTimer = -1e6; update(); });
   document.querySelectorAll('#themeChips .chip').forEach((c) => {
     c.addEventListener('click', () => { settings.theme = c.dataset.theme; applyAll(); persist(); });
@@ -413,12 +365,13 @@
 
   /* ---------- Toetsenbord (handig met een bluetooth-toetsenbord) ---------- */
   document.addEventListener('keydown', (e) => {
-    if (e.target.matches('input, select, button')) return;
+    const t = e.target;
+    if (t && t.matches && t.matches('input, select, button')) return;
     switch (e.key) {
       case ' ':
       case 'k': e.preventDefault(); setPlaying(!playing); break;
-      case 'ArrowUp': e.preventDefault(); setSpeed(settings.speed + 5); break;
-      case 'ArrowDown': e.preventDefault(); setSpeed(settings.speed - 5); break;
+      case 'ArrowUp': e.preventDefault(); setSpeed(settings.speed + 5); showTempo(); break;
+      case 'ArrowDown': e.preventDefault(); setSpeed(settings.speed - 5); showTempo(); break;
       case '+':
       case '=': setFont(settings.font + 4); break;
       case '-':

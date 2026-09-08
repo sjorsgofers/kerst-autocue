@@ -49,9 +49,6 @@ body{
 }
 #viewport::-webkit-scrollbar{ display:none; }
 
-/* Vegen bedient het tempo: de pagina zelf mag dan niet meescrollen */
-html[data-swipe="1"] #viewport{ touch-action:none; }
-
 #mirror{ transition:transform .2s ease; }
 html[data-mirror="1"] #mirror{ transform:scaleX(-1); }
 
